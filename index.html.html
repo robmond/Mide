@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIDE™ — Modelo de Innovación y Desarrollo Empresarial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700;1,900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --dark:        #091717;
+      --dark-mid:    #143433;
+      --cream:       #fbfaf4;
+      --cream-alt:   #f6f5ee;
+      --warm-light:  #e4e3d4;
+      --text:        #091717;
+      --text-muted:  rgba(9,23,23,0.58);
+      --text-subtle: rgba(9,23,23,0.40);
+      --border:      rgba(9,23,23,0.10);
+      --teal-1:      #143433;
+      --teal-2:      #1d6b68;
+      --teal-3:      #2a9d96;
+      --teal-btn:    #1db3ad;
+      --teal-btn-dk: #178e89;
+      --teal-glow:   rgba(29,179,173,0.28);
+      --font-serif: "Playfair Display", Georgia, serif;
+      --font-sans:  "DM Sans", system-ui, sans-serif;
+      --font-edit:  "Newsreader", Georgia, serif;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRID LINES (igual a Comet) ────────────────────── */
+    /* Aplicado como pseudo-elemento sobre secciones claras  */
+    .grid-bg {
+      position: relative;
+    }
+    .grid-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(9,23,23,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(9,23,23,0.055) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 40%, transparent 100%);
+    }
+    /* Para secciones oscuras, líneas en crema muy tenue */
+    .grid-bg > * { position: relative; z-index: 1; }
+    .grid-bg > .orb { z-index: 0; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    .wrap    { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+    .wrap-sm { max-width:  680px; margin: 0 auto; padding: 0 32px; }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    .nav-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(251,250,244,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      max-width: 1120px; margin: 0 auto; padding: 0 32px;
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: var(--font-sans); font-weight: 700; font-size: 15px;
+      color: var(--dark); letter-spacing: -0.01em;
+    }
+    .nav-brand small { font-weight: 300; opacity: 0.5; font-size: 12px; margin-left: 6px; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-a {
+      font-size: 13px; font-weight: 400; color: var(--text-muted);
+      padding: 7px 14px; border-radius: 50px;
+      transition: background .18s, color .18s;
+    }
+    .nav-a:hover { background: var(--cream-alt); color: var(--dark); }
+    .btn-nav {
+      font-size: 13px; font-weight: 600; color: #fff;
+      background: var(--teal-btn); padding: 9px 20px; border-radius: 50px;
+      transition: background .2s, box-shadow .2s;
+      box-shadow: 0 2px 12px var(--teal-glow);
+    }
+    .btn-nav:hover {
+      background: var(--teal-btn-dk);
+      box-shadow: 0 4px 20px var(--teal-glow);
+    }
+
+    /* ─── BUTTONS ────────────────────────────────────────── */
+    .btn-dark {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 600;
+      color: #fff; background: var(--teal-btn);
+      padding: 14px 30px; border-radius: 50px;
+      border: none; cursor: pointer;
+      box-shadow: 0 2px 16px var(--teal-glow);
+      transition: background .2s, box-shadow .2s, transform .15s;
+    }
+    .btn-dark:hover {
+      background: var(--teal-btn-dk);
+      box-shadow: 0 6px 28px var(--teal-glow);
+    }
+    .btn-dark:active { transform: scale(.98); }
+    .btn-light {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 14px; font-weight: 400;
+      color: var(--text-muted); background: transparent;
+      padding: 13px 24px; border-radius: 50px;
+      border: 1px solid var(--border);
+      cursor: pointer; transition: background .2s, color .2s, border-color .2s;
+    }
+    .btn-light:hover { background: var(--cream-alt); color: var(--dark); border-color: rgba(9,23,23,0.2); }
+
+    /* ─── GRADIENT ORBS (clave del look Comet) ───────────── */
+    .orb {
+      position: absolute; border-radius: 50%;
+      pointer-events: none; user-select: none;
+    }
+    .orb-teal {
+      background: radial-gradient(circle at 35% 35%,
+        #4ecdc4 0%, #1d6b68 35%, #0d3635 65%, #091717 100%);
+      box-shadow: 0 0 60px rgba(78,205,196,0.25);
+    }
+    .orb-coral {
+      background: radial-gradient(circle at 40% 30%,
+        #ff8c69 0%, #c0392b 45%, #6b1a1a 80%, #1a0a0a 100%);
+      box-shadow: 0 0 50px rgba(255,140,105,0.20);
+    }
+    .orb-gold {
+      background: radial-gradient(circle at 35% 30%,
+        #f4d03f 0%, #c49a1a 40%, #7a5c00 75%, #2a1e00 100%);
+      box-shadow: 0 0 40px rgba(244,208,63,0.15);
+    }
+    .orb-green {
+      background: radial-gradient(circle at 40% 35%,
+        #52c28a 0%, #1e8a5e 45%, #0a4a30 80%, #021a10 100%);
+    }
+    .orb-stone {
+      background: radial-gradient(circle at 40% 30%,
+        #b8b0a0 0%, #786e60 50%, #3a342c 80%, #111 100%);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      position: relative; text-align: center;
+      padding: 110px 32px 100px;
+      overflow: hidden;
+    }
+    /* orbs decorativos hero */
+    .hero .orb-teal  { width:200px; height:200px; top:-60px; left:-70px; opacity:.90; }
+    .hero .orb-coral { width:160px; height:160px; top: 20px; right:-50px; opacity:.85; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500; color: var(--text-muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow a { color: var(--dark-mid); text-decoration: underline; text-underline-offset: 3px; }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(46px, 7.5vw, 88px);
+      font-weight: 900;
+      line-height: .95;
+      letter-spacing: -0.03em;
+      color: var(--dark);
+      max-width: 780px; margin: 0 auto 24px;
+    }
+    .hero-title em {
+      font-style: italic; font-weight: 700; color: var(--text-muted);
+    }
+    .hero-sub {
+      font-family: var(--font-edit);
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 300; color: var(--text-muted);
+      max-width: 480px; margin: 0 auto 44px;
+      line-height: 1.6;
+    }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── SECTION LABEL ──────────────────────────────────── */
+    .sec-label {
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 18px;
+    }
+    .divider { height: 1px; background: var(--border); border: none; }
+
+    /* ─── PROBLEMA ───────────────────────────────────────── */
+    .s-problem { padding: 100px 32px; }
+    .problem-intro { max-width: 600px; margin-bottom: 56px; }
+    .problem-intro h2 {
+      font-family: var(--font-serif); font-size: clamp(28px, 3.8vw, 44px);
+      font-weight: 900; line-height: 1.02; letter-spacing: -.025em;
+      color: var(--dark); margin-bottom: 18px;
+    }
+    .problem-intro p { font-size: 16px; color: var(--text-muted); line-height: 1.7; }
+
+    /* grid 5 cards con borde gradiente teal — el detalle clave */
+    .p-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+    .p-card {
+      background: var(--cream-alt); border-radius: 16px; padding: 28px 22px;
+      position: relative; overflow: hidden;
+      /* borde gradiente teal */
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      box-shadow: 0 0 0 1px var(--border);
+      transition: box-shadow .22s;
+    }
+    .p-card::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 17px; z-index: -1;
+      background: linear-gradient(135deg, rgba(20,52,51,0) 0%, rgba(29,107,104,0) 100%);
+      transition: background .3s;
+    }
+    .p-card:hover {
+      box-shadow: 0 0 0 1.5px var(--teal-btn), 0 4px 24px var(--teal-glow);
+    }
+    .p-card:hover::before {
+      background: linear-gradient(135deg, var(--teal-btn) 0%, rgba(42,157,150,0.3) 100%);
+    }
+    .p-num {
+      font-family: var(--font-serif); font-size: 42px; font-weight: 900;
+      color: var(--warm-light); letter-spacing: -.04em; line-height: 1;
+      margin-bottom: 16px;
+    }
+    .p-card h3 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 8px; line-height: 1.3; }
+    .p-card p  { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+
+    /* ─── QUÉ ES ─────────────────────────────────────────── */
+    .s-what {
+      padding: 100px 32px;
+      background: var(--cream-alt);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .s-what .orb-teal  { width:260px; height:260px; bottom:-80px; right:-60px; opacity:.7; }
+    .s-what .orb-gold  { width:120px; height:120px; top:-40px; right:200px; opacity:.6; }
+    .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; position: relative; z-index: 1; }
+    .what-left h2 {
+      font-family: var(--font-serif); font-size: clamp(28px,3.8vw,44px);
+      font-weight: 900; line-height: 1.0; letter-spacing: -.025em;
+      color: var(--dark); margin-bottom: 20px;
+    }
+    .what-left h2 em { font-style: italic; color: var(--text-muted); }
+    .what-left p { font-size: 16px; color: var(--text-muted); line-height: 1.7; }
+    .what-items { display: flex; flex-direction: column; }
+    .w-row {
+      display: flex; gap: 14px; padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background .18s;
+    }
+    .w-row:first-child { padding-top: 0; }
+    .w-row:last-child  { border-bottom: none; padding-bottom: 0; }
+    .w-tick {
+      width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;
+      border-radius: 50%; background: var(--cream);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .w-tick svg { width: 9px; height: 9px; }
+    .w-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .w-text strong { color: var(--dark); font-weight: 600; }
+
+    /* ─── CÓMO FUNCIONA ──────────────────────────────────── */
+    .s-how { padding: 100px 32px; }
+    .how-head { margin-bottom: 60px; }
+    .how-head h2 {
+      font-family: var(--font-serif); font-size: clamp(28px,3.8vw,44px);
+      font-weight: 900; line-height: 1.0; letter-spacing: -.025em; color: var(--dark);
+    }
+    .how-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+    .h-card {
+      background: var(--cream-alt); border-radius: 16px; padding: 32px 24px 44px;
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border);
+      transition: box-shadow .22s, border-color .22s;
+    }
+    .h-card:hover {
+      border-color: var(--teal-btn);
+      box-shadow: 0 4px 28px var(--teal-glow);
+    }
+    /* acento teal en la parte superior de cada card */
+    .h-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--teal-btn) 0%, var(--teal-3) 50%, transparent 100%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .h-card:hover::after { opacity: 1; }
+    .h-week {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 20px;
+    }
+    .h-card h3 {
+      font-family: var(--font-serif); font-size: 19px; font-weight: 700;
+      color: var(--dark); margin-bottom: 10px; line-height: 1.2;
+    }
+    .h-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .h-num {
+      position: absolute; bottom: -10px; right: 12px;
+      font-family: var(--font-serif); font-size: 90px; font-weight: 900;
+      color: var(--warm-light); line-height: 1; letter-spacing: -.04em;
+      user-select: none; opacity: .6;
+    }
+
+    /* ─── ENTREGABLES ────────────────────────────────────── */
+    .s-del {
+      padding: 100px 32px;
+      background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+    /* orbs en fondo oscuro */
+    .s-del .orb-teal  { width:300px; height:300px; bottom:-100px; left:-80px; opacity:.55; }
+    .s-del .orb-coral { width:180px; height:180px; top: -60px; right:-40px; opacity:.50; }
+    .s-del .orb-gold  { width:140px; height:140px; top:30px; right:220px; opacity:.40; }
+
+    .del-inner { position: relative; z-index: 1; }
+    .del-head { margin-bottom: 56px; }
+    .del-head .sec-label { color: rgba(251,250,244,0.40); }
+    .del-head h2 {
+      font-family: var(--font-serif); font-size: clamp(28px,3.8vw,46px);
+      font-weight: 900; line-height: 1.0; letter-spacing: -.025em;
+      color: var(--cream);
+    }
+    .del-head p { font-size: 16px; color: rgba(251,250,244,0.55); margin-top: 14px; max-width: 440px; line-height: 1.65; }
+
+    .del-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+    .d-card {
+      background: rgba(20,52,51,0.35);
+      padding: 26px 22px;
+      border: 1px solid rgba(251,250,244,0.07);
+      transition: background .22s;
+    }
+    .d-card:nth-child(1)  { border-radius: 16px 0 0 0; }
+    .d-card:nth-child(4)  { border-radius: 0 16px 0 0; }
+    .d-card:nth-child(5)  { border-radius: 0 0 0 16px; }
+    .d-card:nth-child(8)  { border-radius: 0 0 16px 0; }
+    .d-card:hover { background: rgba(20,52,51,0.7); }
+    .d-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(251,250,244,0.08);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .d-icon svg { width: 13px; height: 13px; }
+    .d-card h4 { font-size: 13px; font-weight: 600; color: var(--cream); margin-bottom: 5px; line-height: 1.3; }
+    .d-card p  { font-size: 12px; color: rgba(251,250,244,0.50); line-height: 1.55; }
+
+    /* ─── PARA QUIÉN ─────────────────────────────────────── */
+    .s-whom { padding: 100px 32px; }
+    .whom-head { margin-bottom: 56px; }
+    .whom-head h2 {
+      font-family: var(--font-serif); font-size: clamp(28px,3.8vw,44px);
+      font-weight: 900; line-height: 1.0; letter-spacing: -.025em; color: var(--dark);
+    }
+    .whom-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .wm-card {
+      background: var(--cream-alt); border-radius: 20px; padding: 36px 32px;
+      border: 1px solid var(--border);
+      display: flex; gap: 20px; align-items: flex-start;
+      transition: box-shadow .22s, border-color .22s;
+    }
+    .wm-card:hover { border-color: var(--teal-btn); box-shadow: 0 4px 24px var(--teal-glow); }
+    .wm-num {
+      font-family: var(--font-serif); font-size: 28px; font-weight: 900;
+      color: var(--warm-light); letter-spacing: -.03em; line-height: 1; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .wm-body h3 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 8px; line-height: 1.3; }
+    .wm-body p  { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+
+    /* ─── PRECIOS ─────────────────────────────────────────── */
+    .s-price {
+      padding: 100px 32px;
+      background: var(--cream-alt);
+      border-top: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .s-price .orb-teal  { width:220px; height:220px; bottom:-70px; right:-50px; opacity:.55; }
+    .s-price .orb-stone { width:140px; height:140px; top:-50px; left:100px; opacity:.50; }
+
+    .price-head { margin-bottom: 60px; position: relative; z-index: 1; }
+    .price-head h2 {
+      font-family: var(--font-serif); font-size: clamp(28px,3.8vw,46px);
+      font-weight: 900; line-height: 1.0; letter-spacing: -.025em; color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .price-head p { font-size: 16px; color: var(--text-muted); max-width: 480px; line-height: 1.65; }
+
+    .price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; position: relative; z-index: 1; }
+    .pr-card {
+      border-radius: 20px; padding: 36px 30px;
+      background: var(--cream);
+      position: relative; overflow: hidden;
+      transition: box-shadow .22s;
+    }
+    .pr-card:hover { box-shadow: 0 8px 36px rgba(9,23,23,0.10); }
+
+    /* borde gradiente teal — el elemento signature de Comet */
+    .pr-card.featured {
+      background: var(--cream);
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      box-shadow: 0 0 0 1.5px var(--teal-btn), 0 8px 36px var(--teal-glow);
+    }
+    .pr-card.featured::before {
+      content: ''; position: absolute; inset: -1.5px; border-radius: 21px; z-index: -1;
+      background: linear-gradient(145deg, var(--teal-btn), var(--teal-3), var(--teal-btn-dk));
+    }
+    .pr-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--dark); color: var(--cream);
+      font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 50px;
+    }
+    .pr-name {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-subtle); margin-bottom: 20px;
+    }
+    .pr-amount {
+      font-family: var(--font-serif); font-weight: 900; line-height: 1;
+      letter-spacing: -.04em; margin-bottom: 6px; color: var(--dark);
+    }
+    .pr-amount .cur { font-size: 18px; vertical-align: super; padding-top: 4px; display: inline-block; color: var(--text-muted); }
+    .pr-amount .num { font-size: clamp(34px, 4vw, 48px); }
+    .pr-range { font-size: 12px; color: var(--text-subtle); margin-bottom: 24px; }
+    .pr-desc {
+      font-size: 14px; color: var(--text-muted); line-height: 1.65;
+      padding-bottom: 24px; margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .pr-feats { display: flex; flex-direction: column; gap: 11px; }
+    .pr-feat  { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+    .pr-dot   { width: 4px; height: 4px; border-radius: 50%; background: var(--warm-light); margin-top: 7px; flex-shrink: 0; }
+    .pr-card.featured .pr-dot { background: var(--teal-2); }
+
+    .price-note {
+      margin-top: 36px; text-align: center;
+      font-size: 13px; color: var(--text-subtle); line-height: 1.7;
+      position: relative; z-index: 1;
+    }
+    .price-note strong { color: var(--text-muted); font-weight: 600; }
+
+    /* ─── CTA FINAL ──────────────────────────────────────── */
+    .s-cta {
+      padding: 140px 32px;
+      background: var(--dark);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .s-cta .orb-teal  { width:340px; height:340px; bottom:-120px; left:-100px; opacity:.60; }
+    .s-cta .orb-coral { width:220px; height:220px; top:-60px; right:-50px; opacity:.50; }
+    .s-cta .orb-gold  { width:140px; height:140px; top:30px; left: 30%; opacity:.35; }
+    .s-cta .orb-green { width:100px; height:100px; bottom: 60px; right: 25%; opacity:.30; }
+
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-inner h2 {
+      font-family: var(--font-serif); font-size: clamp(38px, 6vw, 72px);
+      font-weight: 900; line-height: .95; letter-spacing: -.035em;
+      color: var(--cream); margin-bottom: 22px;
+    }
+    .cta-inner h2 em { font-style: italic; color: rgba(251,250,244,0.50); }
+    .cta-inner p {
+      font-family: var(--font-edit); font-size: 18px; font-weight: 300;
+      color: rgba(251,250,244,0.58); margin-bottom: 40px; line-height: 1.6;
+    }
+    .cta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-cta-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 600;
+      color: #fff; background: var(--teal-btn);
+      padding: 14px 30px; border-radius: 50px;
+      box-shadow: 0 2px 20px var(--teal-glow);
+      transition: background .2s, box-shadow .2s; cursor: pointer; border: none;
+    }
+    .btn-cta-primary:hover {
+      background: var(--teal-btn-dk);
+      box-shadow: 0 6px 32px var(--teal-glow);
+    }
+    .btn-cta-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 14px; font-weight: 400;
+      color: rgba(251,250,244,0.65); background: transparent;
+      padding: 14px 24px; border-radius: 50px;
+      border: 1px solid rgba(251,250,244,0.18);
+      transition: background .2s, color .2s; cursor: pointer;
+    }
+    .btn-cta-ghost:hover { background: rgba(251,250,244,0.08); color: var(--cream); }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(251,250,244,0.07);
+      padding: 28px 32px;
+    }
+    .foot-inner {
+      max-width: 1120px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .foot-brand { font-size: 14px; font-weight: 600; color: var(--cream); }
+    .foot-brand span { font-weight: 300; opacity: .4; margin-left: 4px; }
+    .foot-copy { font-size: 12px; color: rgba(251,250,244,0.30); }
+
+    /* ─── ANIMACIONES ────────────────────────────────────── */
+    @keyframes up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+    .hero-eyebrow { animation: up .5s ease both .05s; }
+    .hero-title   { animation: up .6s ease both .18s; }
+    .hero-sub     { animation: up .5s ease both .30s; }
+    .hero-actions { animation: up .5s ease both .42s; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1000px) {
+      .p-grid   { grid-template-columns: repeat(3,1fr); }
+      .how-grid { grid-template-columns: repeat(2,1fr); }
+      .del-grid { grid-template-columns: repeat(2,1fr); }
+      .whom-grid { grid-template-columns: 1fr; }
+      .what-grid { grid-template-columns: 1fr; gap: 48px; }
+      .price-grid { grid-template-columns: 1fr; max-width: 420px; }
+    }
+    @media (max-width: 620px) {
+      .nav-links { display: none; }
+      .p-grid   { grid-template-columns: 1fr 1fr; }
+      .how-grid { grid-template-columns: 1fr; }
+      .del-grid { grid-template-columns: 1fr; }
+      .d-card:nth-child(1) { border-radius: 16px 16px 0 0; }
+      .d-card:nth-child(4) { border-radius: 0; }
+      .d-card:nth-child(5) { border-radius: 0; }
+      .d-card:nth-child(8) { border-radius: 0 0 16px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrap">
+    <nav class="nav">
+      <span class="nav-brand">MIDE™ <small>por Zenit · Spherical</small></span>
+      <div class="nav-links">
+        <a href="#metodologia" class="nav-a">Metodología</a>
+        <a href="#entregables" class="nav-a">Entregables</a>
+        <a href="#inversion"   class="nav-a">Inversión</a>
+        <a href="#contacto" class="btn-nav">Agenda una reunión</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero grid-bg">
+    <div class="orb orb-teal"></div>
+    <div class="orb orb-coral"></div>
+    <div style="position:relative; z-index:1;">
+      <p class="hero-eyebrow">Una propuesta de <a href="#">Zenit · Spherical</a></p>
+      <h1 class="hero-title">
+        Claridad para decidir<br><em>dónde innovar</em>
+      </h1>
+      <p class="hero-sub">
+        Sin crear una gerencia interna.<br>Con un sistema de decisión instalado en 12 a 16 semanas.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn-dark">Agenda una sesión exploratoria</a>
+        <a href="#que-es"   class="btn-light">Conocer MIDE™</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PROBLEMA -->
+  <section class="s-problem grid-bg">
+    <div class="wrap">
+      <div class="problem-intro">
+        <p class="sec-label">El problema que resolvemos</p>
+        <h2>Las empresas quieren innovar, pero no tienen un sistema para decidir</h2>
+        <p>La información existe — señales de mercado, tecnologías emergentes, fondos disponibles. El problema es que está dispersa, no hay criterio financiero y la conversación se vuelve abstracta. El resultado es inmovilismo, no falta de ambición.</p>
+      </div>
+      <div class="p-grid">
+        <div class="p-card"><div class="p-num">01</div><h3>Falta de foco</h3><p>La empresa quiere innovar, pero no sabe en qué área concentrar energía y presupuesto.</p></div>
+        <div class="p-card"><div class="p-num">02</div><h3>Información dispersa</h3><p>Los datos existen, pero nadie los ha consolidado en señales de decisión accionables.</p></div>
+        <div class="p-card"><div class="p-num">03</div><h3>Sin criterio financiero</h3><p>La dirección no sabe cuánto puede invertir en innovación sin comprometer la operación.</p></div>
+        <div class="p-card"><div class="p-num">04</div><h3>Sin función dedicada</h3><p>No hay equipo ni gerencia. Nadie tiene mandato para llevar la agenda de innovación.</p></div>
+        <div class="p-card"><div class="p-num">05</div><h3>Del interés a la acción</h3><p>Existe intención real, pero los proyectos no arrancan por falta de una secuencia clara.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ ES MIDE -->
+  <section class="s-what grid-bg" id="que-es">
+    <div class="orb orb-teal"></div>
+    <div class="orb orb-gold"></div>
+    <div class="wrap">
+      <div class="what-grid">
+        <div class="what-left">
+          <p class="sec-label">Qué es MIDE™</p>
+          <h2>Sistema de gestión de innovación <em>fraccional</em></h2>
+          <p style="margin-top:18px">MIDE™ — Modelo de Innovación y Desarrollo Empresarial — es una función externa especializada que, en 12 a 16 semanas, instala la capacidad de decidir dónde innovar, con qué urgencia y con qué presupuesto. No es consultoría. Es un sistema de decisión adaptado a la empresa mediana.</p>
+        </div>
+        <div class="what-items">
+          <div class="w-row">
+            <div class="w-tick"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#091717" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="w-text"><strong>No es un diagnóstico que queda en un cajón.</strong> Entregamos una herramienta ejecutiva que la dirección usa para decidir de forma continua.</p>
+          </div>
+          <div class="w-row">
+            <div class="w-tick"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#091717" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="w-text"><strong>No es un programa genérico de innovación.</strong> Partimos de los desafíos reales de tu empresa, no de un marco teórico universal.</p>
+          </div>
+          <div class="w-row">
+            <div class="w-tick"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#091717" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="w-text"><strong>No requiere crear estructura interna.</strong> Operamos como función fraccional: resultado sin el costo de una gerencia permanente.</p>
+          </div>
+          <div class="w-row">
+            <div class="w-tick"><svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2 2L7.5 2" stroke="#091717" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="w-text"><strong>No promete innovación.</strong> Promete algo más valioso: claridad estratégica y una hoja de ruta realista para activarla.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="s-how grid-bg" id="metodologia">
+    <div class="wrap">
+      <div class="how-head">
+        <p class="sec-label">Metodología</p>
+        <h2 style="margin-top:14px">Cómo funciona MIDE™</h2>
+      </div>
+      <div class="how-grid">
+        <div class="h-card">
+          <span class="h-week">Semanas 1–2</span>
+          <h3>Alineamiento ejecutivo</h3>
+          <p>Reuniones con dueños y gerencia para entender presiones estratégicas, dolores operacionales y nivel de ambición. Definimos el marco antes de levantar información.</p>
+          <div class="h-num">1</div>
+        </div>
+        <div class="h-card">
+          <span class="h-week">Semanas 2–8</span>
+          <h3>Lectura interna e inteligencia de entorno</h3>
+          <p>Diagnóstico de capacidades internas más radar de tendencias, competidores, tecnologías, startups y fuentes de financiamiento para tu industria.</p>
+          <div class="h-num">2</div>
+        </div>
+        <div class="h-card">
+          <span class="h-week">Semanas 6–10</span>
+          <h3>Herramienta ejecutiva MIDE™</h3>
+          <p>Dashboard con radar competitivo, mapa de startups, módulo de financiamiento y calculadora de capacidad presupuestaria. Hecha para la gerencia.</p>
+          <div class="h-num">3</div>
+        </div>
+        <div class="h-card">
+          <span class="h-week">Semanas 9–16</span>
+          <h3>Portafolio y hoja de ruta</h3>
+          <p>Portafolio priorizado de iniciativas con horizontes de 6 a 18 meses, esfuerzo, dependencias y opciones concretas de implementación.</p>
+          <div class="h-num">4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTREGABLES -->
+  <section class="s-del grid-bg grid-bg-dark" id="entregables">
+    <div class="orb orb-teal"></div>
+    <div class="orb orb-coral"></div>
+    <div class="orb orb-gold"></div>
+    <div class="wrap del-inner">
+      <div class="del-head">
+        <p class="sec-label">Entregables</p>
+        <h2 style="margin-top:14px">Qué recibe tu empresa</h2>
+        <p>Ocho piezas concretas y usables.<br>No informes para archivar: herramientas para decidir.</p>
+      </div>
+      <div class="del-grid">
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><rect x="2" y="1.5" width="9" height="10" rx="1.5" stroke="#fbfaf4" stroke-width="1.1"/><path d="M4 5h5M4 7h5M4 9h3" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Informe ejecutivo estratégico</h4>
+          <p>Síntesis con hallazgos clave, oportunidades y recomendaciones de priorización para la alta dirección.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="#fbfaf4" stroke-width="1.1"/><path d="M6.5 4v3l2 1" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Diagnóstico de capacidades</h4>
+          <p>Lectura aplicada de fortalezas, brechas y restricciones reales para implementar innovación.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="#fbfaf4" stroke-width="1.1"/><circle cx="6.5" cy="6.5" r="1.8" stroke="#fbfaf4" stroke-width="1.1"/><path d="M6.5 2v1M6.5 10v1M2 6.5h1M10 6.5h1" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Radar tecnológico y competitivo</h4>
+          <p>Tendencias, movimientos de competidores, patentes y nuevos productos relevantes para tu industria.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><path d="M3 10L6.5 3l3.5 7" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 8h4" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Mapa de startups</h4>
+          <p>Startups y soluciones externas alineadas a tus focos, con pertinencia y potencial de colaboración.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><rect x="2" y="4.5" width="9" height="6.5" rx="1.5" stroke="#fbfaf4" stroke-width="1.1"/><path d="M4.5 4.5V3.5a2 2 0 014 0v1" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Módulo de financiamiento</h4>
+          <p>Instrumentos aplicables a tu empresa con lectura práctica de elegibilidad y potencial de uso.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><path d="M2 10L5 7l2.5 2L10 5" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 2v9h9" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Calculadora presupuestaria</h4>
+          <p>Estimación de cuánto puede invertir en innovación en tres escenarios: conservador, base y expansivo.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><rect x="1.5" y="2" width="10" height="9" rx="1.5" stroke="#fbfaf4" stroke-width="1.1"/><path d="M4 5.5h5M4 7.5h3.5" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round"/></svg></div>
+          <h4>Dashboard ejecutivo MIDE™</h4>
+          <p>Sistema consolidado de consulta y decisión. Simple, usable y hecho para la gerencia.</p>
+        </div>
+        <div class="d-card">
+          <div class="d-icon"><svg viewBox="0 0 13 13" fill="none"><path d="M2.5 6.5h8M7.5 3.5l3 3-3 3" stroke="#fbfaf4" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h4>Hoja de ruta 6–18 meses</h4>
+          <p>Portafolio priorizado con horizontes, esfuerzo, dependencias y alternativas de implementación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARA QUIÉN -->
+  <section class="s-whom grid-bg">
+    <div class="wrap">
+      <div class="whom-head">
+        <p class="sec-label">¿Para quién es?</p>
+        <h2 style="margin-top:14px">Diseñado para empresas medianas<br>que sienten la presión de innovar</h2>
+      </div>
+      <div class="whom-grid">
+        <div class="wm-card">
+          <div class="wm-num">01</div>
+          <div class="wm-body"><h3>Empresas bajo presión competitiva</h3><p>Ven nuevos competidores, tecnologías emergentes o cambios de mercado, pero no tienen un sistema para convertir esas señales en decisiones concretas.</p></div>
+        </div>
+        <div class="wm-card">
+          <div class="wm-num">02</div>
+          <div class="wm-body"><h3>Sin gerencia de innovación instalada</h3><p>No justifican aún un área permanente de innovación, pero necesitan esa función para ordenar la conversación estratégica a nivel directivo.</p></div>
+        </div>
+        <div class="wm-card">
+          <div class="wm-num">03</div>
+          <div class="wm-body"><h3>Directorios y dueños que quieren decidir</h3><p>Quieren ordenar la conversación de innovación con criterios estratégicos, financieros y números sobre la mesa, no con aspiraciones abstractas.</p></div>
+        </div>
+        <div class="wm-card">
+          <div class="wm-num">04</div>
+          <div class="wm-body"><h3>Empresas que quieren pasar a la acción</h3><p>Tienen interés real en innovar, pero carecen de claridad financiera o de una secuencia de pasos concreta para arrancar.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section class="s-price grid-bg" id="inversion">
+    <div class="orb orb-teal"></div>
+    <div class="orb orb-stone"></div>
+    <div class="wrap">
+      <div class="price-head">
+        <p class="sec-label">Modelo de inversión</p>
+        <h2 style="margin-top:14px">Tres formatos según complejidad</h2>
+        <p>El cobro se estructura en hitos: 40% al inicio · 30% contra entrega de diagnóstico e inteligencia · 30% en instalación ejecutiva final.</p>
+      </div>
+      <div class="price-grid">
+        <!-- LITE -->
+        <div class="pr-card">
+          <p class="pr-name">MIDE™ Lite</p>
+          <div class="pr-amount"><span class="cur">USD </span><span class="num">12–18k</span></div>
+          <p class="pr-range">+ impuestos · empresa con una unidad de negocio</p>
+          <p class="pr-desc">Empresa mediana con menor complejidad sectorial e información relativamente accesible.</p>
+          <div class="pr-feats">
+            <div class="pr-feat"><div class="pr-dot"></div><span>Etapas 1–4 del ciclo completo</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Radar tecnológico y competitivo</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Hoja de ruta simplificada</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Dashboard con plantilla estándar</span></div>
+          </div>
+        </div>
+        <!-- CORE (featured) -->
+        <div class="pr-card featured">
+          <span class="pr-badge">Más elegido</span>
+          <p class="pr-name">MIDE™ Core</p>
+          <div class="pr-amount"><span class="cur">USD </span><span class="num">18–28k</span></div>
+          <p class="pr-range">+ impuestos · complejidad intermedia</p>
+          <p class="pr-desc">Empresa con mayor complejidad operativa o necesidad de mayor profundidad en benchmarking.</p>
+          <div class="pr-feats">
+            <div class="pr-feat"><div class="pr-dot"></div><span>Ciclo completo de 6 etapas</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Herramienta MIDE™ configurada</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Mapa de startups + financiamiento</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Calculadora presupuestaria</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Hoja de ruta completa 6–18 meses</span></div>
+          </div>
+        </div>
+        <!-- PREMIUM -->
+        <div class="pr-card">
+          <p class="pr-name">MIDE™ Premium</p>
+          <div class="pr-amount"><span class="cur">USD </span><span class="num">28–40k</span></div>
+          <p class="pr-range">+ impuestos · alta complejidad</p>
+          <p class="pr-desc">Varias unidades de negocio, alto componente tecnológico o requerimientos avanzados en herramienta y análisis.</p>
+          <div class="pr-feats">
+            <div class="pr-feat"><div class="pr-dot"></div><span>Todo MIDE™ Core</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Módulos sectoriales avanzados</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Mayor profundidad de benchmarking</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Herramienta personalizada</span></div>
+            <div class="pr-feat"><div class="pr-dot"></div><span>Acompañamiento adicional post-proyecto</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="price-note">También disponible: <strong>MIDE™ + 6 meses de acompañamiento</strong> en bundle.<br>Fee de continuidad entre USD 3.000 y 8.000 / mes para oficina externa de innovación, cultura u open innovation.</p>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="s-cta grid-bg grid-bg-dark" id="contacto">
+    <div class="orb orb-teal"  style="width:340px;height:340px;bottom:-120px;left:-100px;"></div>
+    <div class="orb orb-coral" style="width:220px;height:220px;top:-60px;right:-50px;"></div>
+    <div class="orb orb-gold"  style="width:140px;height:140px;top:40px;left:32%;"></div>
+    <div class="orb orb-green" style="width:100px;height:100px;bottom:80px;right:28%;"></div>
+    <div class="cta-inner">
+      <h2>Innovar con<br><em>claridad</em></h2>
+      <p>Una sesión de 45 minutos para entender el contexto, el nivel de urgencia y el formato más adecuado para tu empresa. Sin compromiso, sin propuesta genérica.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn-cta-primary">Agenda una sesión exploratoria</a>
+        <a href="#" class="btn-cta-ghost">Solicitar propuesta a medida</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-inner">
+      <span class="foot-brand">MIDE™ <span>— Zenit · Spherical</span></span>
+      <span class="foot-copy">© 2025 · Sistema de Gestión de Innovación Fraccional</span>
+    </div>
+  </footer>
+
+</body>
+</html>
